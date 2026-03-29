@@ -1,0 +1,295 @@
+<Window x:Class="VolumeController5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VolumeController5"
+        Height="700" Width="1180"
+        MinHeight="640" MinWidth="980"
+        WindowStartupLocation="CenterScreen"
+        Background="#0B1220"
+        Foreground="#EAF2FF"
+        Icon="pack://application:,,,/Assets/app.ico">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BgBrush" Color="#0B1220"/>
+        <SolidColorBrush x:Key="CardBrush" Color="#132238"/>
+        <SolidColorBrush x:Key="CardBrush2" Color="#162A44"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#5AA9FF"/>
+        <SolidColorBrush x:Key="AccentBrush2" Color="#82C5FF"/>
+        <SolidColorBrush x:Key="MutedBrush" Color="#8EA4C2"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#EAF2FF"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Background" Value="{StaticResource CardBrush2}" />
+            <Setter Property="BorderBrush" Value="#2C4670" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        
+        <Style x:Key="ComboToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="Transparent" BorderThickness="0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Background" Value="#122238"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#203A5C"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#203A5C"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#7E92B0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Background" Value="#102038" />
+            <Setter Property="BorderBrush" Value="#34517D" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItemStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10"/>
+                            <Grid Margin="0">
+                                <ContentPresenter Margin="12,0,34,0"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                                  IsHitTestVisible="False"/>
+                                <Path Width="10" Height="6"
+                                      HorizontalAlignment="Right"
+                                      Margin="0,0,12,0"
+                                      VerticalAlignment="Center"
+                                      Fill="#DCEBFF"
+                                      Data="M 0 0 L 10 0 L 5 6 Z"/>
+                                <ToggleButton Style="{StaticResource ComboToggleStyle}" Background="Transparent"
+                                              BorderBrush="{x:Null}"
+                                              Focusable="False"
+                                              ClickMode="Press"
+                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
+                            </Grid>
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Margin="0,4,0,0"
+                                        Background="#122238"
+                                        BorderBrush="#34517D"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ScrollViewer SnapsToDevicePixels="True" MaxHeight="260">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#132948"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#5AA9FF"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#132948"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#5AA9FF"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style TargetType="Slider">
+            <Setter Property="Margin" Value="0,12,0,4" />
+            <Setter Property="Height" Value="28" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Background" Value="#091426" />
+            <Setter Property="BorderBrush" Value="#35527D" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+
+        <Style TargetType="Expander">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Background" Value="#0F1A2E"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#0F1A2E" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="18">
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button x:Name="ManageAppsBtn" Content="Připnuté aplikace" Margin="0,0,10,0"/>
+                    <Button x:Name="PortSettingsBtn" Content="Nastavení portů" Margin="0,0,10,0"/>
+                    <Button x:Name="ReconnectBtn" Content="Znovu připojit"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.7*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="16" Padding="14" Margin="0,0,12,0">
+                <StackPanel>
+                    <TextBlock Text="Připojení" FontWeight="Bold" FontSize="15"/>
+                    <TextBlock Text="Port" Margin="0,12,0,2" Foreground="{StaticResource MutedBrush}"/>
+                    <TextBlock x:Name="PortText" Text="(hledám…)" FontWeight="SemiBold"/>
+
+                    <TextBlock Text="Status" Margin="0,12,0,2" Foreground="{StaticResource MutedBrush}"/>
+                    <TextBlock x:Name="StatusText" Text="Odpojeno" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="16" Padding="14">
+                <StackPanel>
+                    <TextBlock Text="Připnuté aplikace" FontWeight="Bold" FontSize="15"/>
+                    <TextBlock x:Name="PinnedInfoText" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{StaticResource AccentBrush2}"
+                               Text="Připnuté: (žádné)"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Margin="0,0,10,0" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Slider 1" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="Cíl hlasitosti" Margin="0,10,0,4" Foreground="{StaticResource MutedBrush}"/>
+                    <ComboBox x:Name="Target0"/>
+                    <Slider x:Name="Slider0" Minimum="0" Maximum="1" Value="0.5"/>
+                    <TextBlock x:Name="Value0" Text="0.50" FontSize="13" Foreground="{StaticResource AccentBrush2}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Slider 2" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="Cíl hlasitosti" Margin="0,10,0,4" Foreground="{StaticResource MutedBrush}"/>
+                    <ComboBox x:Name="Target1"/>
+                    <Slider x:Name="Slider1" Minimum="0" Maximum="1" Value="0.5"/>
+                    <TextBlock x:Name="Value1" Text="0.50" FontSize="13" Foreground="{StaticResource AccentBrush2}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Margin="0,0,10,0" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Slider 3" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="Cíl hlasitosti" Margin="0,10,0,4" Foreground="{StaticResource MutedBrush}"/>
+                    <ComboBox x:Name="Target2"/>
+                    <Slider x:Name="Slider2" Minimum="0" Maximum="1" Value="0.5"/>
+                    <TextBlock x:Name="Value2" Text="0.50" FontSize="13" Foreground="{StaticResource AccentBrush2}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="3" Margin="0,0,10,0" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Slider 4" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="Cíl hlasitosti" Margin="0,10,0,4" Foreground="{StaticResource MutedBrush}"/>
+                    <ComboBox x:Name="Target3"/>
+                    <Slider x:Name="Slider3" Minimum="0" Maximum="1" Value="0.5"/>
+                    <TextBlock x:Name="Value3" Text="0.50" FontSize="13" Foreground="{StaticResource AccentBrush2}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="4" Background="{StaticResource CardBrush}" BorderBrush="#264369" BorderThickness="1" CornerRadius="18" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Slider 5" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="Cíl hlasitosti" Margin="0,10,0,4" Foreground="{StaticResource MutedBrush}"/>
+                    <ComboBox x:Name="Target4"/>
+                    <Slider x:Name="Slider4" Minimum="0" Maximum="1" Value="0.5"/>
+                    <TextBlock x:Name="Value4" Text="0.50" FontSize="13" Foreground="{StaticResource AccentBrush2}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Expander Grid.Row="3" Margin="0,18,0,0" Header="Log a diagnostika (klikni pro rozbalení)" IsExpanded="False" Foreground="{StaticResource TextBrush}">
+            <Border Background="#081121" BorderBrush="#264369" BorderThickness="1" CornerRadius="14" Padding="10">
+                <TextBox x:Name="LogBox"
+                         Height="170"
+                         VerticalScrollBarVisibility="Auto"
+                         IsReadOnly="True"
+                         TextWrapping="Wrap"/>
+            </Border>
+        </Expander>
+    </Grid>
+</Window>
